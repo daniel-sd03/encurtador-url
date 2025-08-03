@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <title>Encurtador de URL</title>
+  <style>
+    body { font-family: Arial, sans-serif; max-width: 600px; margin: 50px auto; }
+    input[type="text"] { width: 100%; padding: 10px; font-size: 16px; }
+    button { padding: 10px 20px; font-size: 16px; margin-top: 10px; border-radius: 10px;}
+    #result { margin-top: 20px; font-weight: bold; }
+  </style>
+</head>
+<body>
+  <h1>Encurtador de URL</h1>
+  <input id="url-input" type="text" placeholder="Digite a URL original aqui" />
+  <button onclick="encurtar()">Encurtar URL</button>
+  <div id="result"></div> 
+
+  <script src="configAWS.js"></script> 
+  <script> 
+    async function encurtar() {
+      const urlOriginal = document.getElementById('url-input').value.trim();
+      const resultDiv = document.getElementById('result');
+      resultDiv.textContent = '';
+
+      // Verificando se a URL da API foi inserida
+      if (!API_ENCURTADOR_URL) {
+        resultDiv.textContent = "Erro interno";
+        console.error("Configuração faltando: defina API_LAMBDA_URL");
+        return;
+      }
+
+      //testando se o que o usuário digitou está vazio
+      if (!urlOriginal) {
+        resultDiv.textContent = 'Por favor, digite uma URL válida.';
+        return;
+      }
+
+      try {
+        //Montando requisição para enviar para API
+        const response = await fetch(API_ENCURTADOR_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ url: urlOriginal }),
+        });
+
+        //Pegando respota da API
+         const data = await response.json();
+
+        //Verificando erro
+        if (!response.ok) {
+          let errorText = '';
+          try {
+            errorText = data.erro || JSON.stringify(data);
+          } catch (e) {
+            errorText = 'Erro inesperado ao processar a resposta.';
+          }
+          resultDiv.textContent = `Erro: ${response.status} - ${errorText}`;
+          return;
+        }
+
+        if (data.urlCurta) {//montando URL curta
+          resultDiv.innerHTML = `URL curta: <a href="${data.urlCurta}" target="_blank">${data.urlCurta}</a>`;
+        } else if (data.erro) {//verificando erro
+          resultDiv.textContent = `Erro: ${data.erro}`;
+        } else {
+          resultDiv.textContent = 'Resposta inesperada da API.';
+        }
+      } catch (error) {
+        resultDiv.textContent = 'Erro ao conectar com a API.';
+        console.error(error);
+      }
+    }
+  </script>
+</body>
+</html>
