@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Redirecionando...</title>
+  <style>
+    body { font-family: Arial, sans-serif; text-align: center; margin-top: 100px; }
+    #redirect-btn { display: none; padding: 10px 20px; font-size: 16px; border-radius: 10px;}
+  </style>
+</head>
+<body>
+  <h1>Você está sendo redirecionado...</h1>
+  <p id="txt-central">Aguarde alguns segundos...</p>
+  <button id="redireciona-btn">Ir para o site</button>
+
+  <script src="configAWS.js"></script> 
+  <script>
+    (function() {
+      const params = new URLSearchParams(window.location.search);
+      const urlCurta = params.get("url-curta");
+
+      // Verificando se link do S3 foi definido
+      if (!S3_WEBSITE_URL) {
+        document.getElementById("txt-central").innerText = "Erro interno: configuração ausente.";
+        console.error("Configuração faltando: defina S3_WEBSITE_URL em configAWS.js");
+        return;
+      }
+
+      // Verificando se existe url
+      if (!urlCurta) {
+        document.getElementById("txt-central").innerText = "Link inválido.";
+      } else {
+        const linkRedireciona = S3_WEBSITE_URL + urlCurta;
+        const txtCentral = document.getElementById("txt-central");
+        const botao = document.getElementById("redireciona-btn");
+
+        let tempo = 5;
+
+        txtCentral.innerText = `Redirecionando em ${tempo} segundos...`;
+
+        const interval = setInterval(() => {
+          tempo--;
+          if (tempo > 0) {
+            txtCentral.innerText = `Redirecionando em ${tempo} segundos...`;
+          } else {
+            clearInterval(interval);
+            txtCentral.innerText = "Clique no botão abaixo para continuar:";
+            botao.style.display = "inline-block";
+            botao.onclick = () => window.location.href = linkRedireciona;
+          }
+        }, 1000);
+      }
+    })();
+  </script>
+</body>
+</html>
