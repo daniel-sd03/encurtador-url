@@ -20,7 +20,7 @@
       const urlCurta = params.get("url-curta");
 
       // Verificando se link do S3 foi definido
-      if (!S3_WEBSITE_URL) {
+      if (typeof S3_WEBSITE_URL === "undefined" || !S3_WEBSITE_URL) { 
         document.getElementById("txt-central").innerText = "Erro interno: configuração ausente.";
         console.error("Configuração faltando: defina S3_WEBSITE_URL em configAWS.js");
         return;
