@@ -3,36 +3,149 @@
 <head>
   <meta charset="UTF-8" />
   <title>Encurtador de URL</title>
+
+   <!-- Fonte Poppins -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  
   <style>
-    body { font-family: Arial, sans-serif; max-width: 600px; margin: 50px auto; }
-    input[type="text"] { width: 100%; padding: 10px; font-size: 16px; }
-    button { padding: 10px 20px; font-size: 16px; margin-top: 10px; border-radius: 10px;}
-    #result { margin-top: 20px; font-weight: bold; }
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: "Poppins", sans-serif;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+      color: white;
+    }
+
+    .container {
+      width: 800px;
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(10px);
+      padding: 40px;
+      border-radius: 20px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 30px;
+      font-weight: 700;
+      font-size: 36px;
+    }
+
+    .input-group {
+      display: flex;
+      background: #2d2f5a;
+      border-radius: 15px;
+      overflow: hidden;
+      box-shadow: 0 5px 20px rgba(0, 0, 0, 0.4);
+    }
+
+    input[type="text"] {
+      flex: 1;
+      padding: 15px;
+      font-size: 16px;
+      border: none;
+      outline: none;
+      background: transparent;
+      color: white;
+    }
+
+    input::placeholder {
+      color: #bbb;
+    }
+
+    .btn-encurtar {
+      background: linear-gradient(90deg, #1aff00, #0fbf00);
+      border: none;
+      padding: 0 30px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .btn-encurtar:hover {
+      transform: scale(1.05);
+    }
+
+    .result-box {
+      margin-top: 25px;
+      background: linear-gradient(90deg, #3a2a78, #2a1f5f);
+      padding: 15px 20px;
+      border-radius: 15px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      display: none;
+    }
+
+    .result-link {
+      font-weight: 600;
+    }
+
+    .copy-btn {
+      background: #ffffff;
+      color: #333;
+      border: none;
+      padding: 8px 15px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 500;
+      transition: 0.2s;
+    }
+
+    .copy-btn:hover {
+      background: #ddd;
+    }
+
   </style>
 </head>
 <body>
-  <h1>Encurtador de URL</h1>
-  <input id="url-input" type="text" placeholder="Digite a URL original aqui" />
-  <button onclick="encurtar()">Encurtar URL</button>
-  <div id="result"></div> 
+
+  <div class="container">
+    <h1>Encurtador de URL</h1>
+
+    <div class="input-group">
+      <input id="url-input" type="text" placeholder="https://seusite.com/sua-url/aqui" />
+      <button class="btn-encurtar" onclick="encurtar()">Encurtar</button>
+    </div>
+
+    <div class="result-box" id="result-box">
+      <span class="result-link" id="result-link"></span>
+      <button class="copy-btn" onclick="copiar()">Copiar Link</button>
+    </div>
+  </div>
 
   <script src="configAWS.js"></script> 
   <script> 
     async function encurtar() {
       const urlOriginal = document.getElementById('url-input').value.trim();
-      const resultDiv = document.getElementById('result');
-      resultDiv.textContent = '';
+      const resultBox = document.getElementById('result-box');
+      const resultLink = document.getElementById('result-link');
+
+      resultLink.textContent = '';
+      resultBox.style.display = "none";
 
       // Verificando se a URL da API foi inserida
       if (!API_ENCURTADOR_URL) {
-        resultDiv.textContent = "Erro interno";
+        resultLink.textContent = "Erro interno";
+        resultBox.style.display = "flex";
         console.error("Configuração faltando: defina API_LAMBDA_URL");
         return;
       }
 
       //testando se o que o usuário digitou está vazio
       if (!urlOriginal) {
-        resultDiv.textContent = 'Por favor, digite uma URL válida.';
+        resultLink.textContent = 'Por favor, digite uma URL válida.';
+        resultBox.style.display = "flex";
         return;
       }
 
@@ -55,19 +168,24 @@
           } catch (e) {
             errorText = 'Erro inesperado ao processar a resposta.';
           }
-          resultDiv.textContent = `Erro: ${response.status} - ${errorText}`;
+          resultLink.textContent = `Erro: ${response.status} - ${errorText}`;
+          resultBox.style.display = "flex";
           return;
         }
 
         if (data.urlCurta) {//montando URL curta
-          resultDiv.innerHTML = `URL curta: <a href="${data.urlCurta}" target="_blank">${data.urlCurta}</a>`;
+          resultLink.innerHTML = `URL curta: <a href="${data.urlCurta}" target="_blank">${data.urlCurta}</a>`;
+          resultBox.style.display = "flex";
         } else if (data.erro) {//verificando erro
-          resultDiv.textContent = `Erro: ${data.erro}`;
+          resultLink.textContent = `Erro: ${data.erro}`;
+          resultBox.style.display = "flex";
         } else {
-          resultDiv.textContent = 'Resposta inesperada da API.';
+          resultLink.textContent = 'Resposta inesperada da API.';
+          resultBox.style.display = "flex";
         }
       } catch (error) {
-        resultDiv.textContent = 'Erro ao conectar com a API.';
+        resultLink.textContent = 'Erro ao conectar com a API.';
+        resultBox.style.display = "flex";
         console.error(error);
       }
     }
