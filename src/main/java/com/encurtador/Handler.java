@@ -24,8 +24,9 @@ public class Handler implements RequestHandler<Map<String, Object>, Map<String, 
 	private static final String BUCKET_NAME = "";
 	private static final Region REGION = Region.US_EAST_1;
 	private static final String S3_WEBSITE_ORIGIN =  "";
-	private static final String REDIRECT_BASE_URL =  S3_WEBSITE_ORIGIN + "";
-		
+	private static final String SHORT_PATH = "";
+	private static final String REDIRECT_PATH = "";
+	private static final String REDIRECT_BASE_URL = S3_WEBSITE_ORIGIN + "/" + REDIRECT_PATH + "?url-curta=";
 	// Iniciando conexão com S3
 	private static final S3Client s3 = S3Client.builder()
 			.region(REGION)
@@ -71,7 +72,7 @@ public class Handler implements RequestHandler<Map<String, Object>, Map<String, 
 				// montagem do escopo para enviar os dados para o S3
 				PutObjectRequest request = PutObjectRequest.builder()
 						.bucket(BUCKET_NAME)
-						.key("encurtado/" + curtaUrl)
+						.key(SHORT_PATH + "/" + curtaUrl)
 						.websiteRedirectLocation(originalUrl)
 						.metadata(Map.of("redirect-url", originalUrl))
 						.contentLength(0L)
