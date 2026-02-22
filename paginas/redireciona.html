@@ -20,9 +20,9 @@
       const urlCurta = params.get("url-curta");
 
       // Verificando se link do S3 foi definido
-      if (typeof S3_WEBSITE_URL === "undefined" || !S3_WEBSITE_URL) { 
+      if (typeof S3_SHORT_WEBSITE_URL === "undefined" || !S3_SHORT_WEBSITE_URL) { 
         document.getElementById("txt-central").innerText = "Erro interno: configuração ausente.";
-        console.error("Configuração faltando: defina S3_WEBSITE_URL em configAWS.js");
+        console.error("Configuração faltando: defina S3_SHORT_WEBSITE_URL em configAWS.js");
         return;
       }
 
@@ -30,7 +30,7 @@
       if (!urlCurta) {
         document.getElementById("txt-central").innerText = "Link inválido.";
       } else {
-        const linkRedireciona = S3_WEBSITE_URL + urlCurta;
+        const linkRedireciona = S3_SHORT_WEBSITE_URL + "/" + urlCurta;
         const txtCentral = document.getElementById("txt-central");
         const botao = document.getElementById("redireciona-btn");
 
