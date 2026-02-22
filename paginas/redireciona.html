@@ -3,15 +3,98 @@
 <head>
   <meta charset="UTF-8">
   <title>Redirecionando...</title>
+    <!-- Fonte -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+
   <style>
-    body { font-family: Arial, sans-serif; text-align: center; margin-top: 100px; }
-    #redirect-btn { display: none; padding: 10px 20px; font-size: 16px; border-radius: 10px;}
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: "Poppins", sans-serif;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+      color: white;
+    }
+
+    .container {
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(15px);
+      padding: 50px 60px;
+      border-radius: 25px;
+      text-align: center;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+      width: 500px;
+      animation: fadeIn 0.8s ease-in-out;
+    }
+
+    h1 {
+      font-size: 28px;
+      margin-bottom: 20px;
+      font-weight: 600;
+    }
+
+    #txt-central {
+      font-size: 18px;
+      margin-bottom: 30px;
+      color: #ccc;
+    }
+
+    #redireciona-btn {
+      display: none;
+      padding: 12px 30px;
+      font-size: 16px;
+      border-radius: 12px;
+      border: none;
+      font-weight: 600;
+      cursor: pointer;
+      background: linear-gradient(90deg, #1aff00, #0fbf00);
+      transition: 0.3s;
+    }
+
+    #redireciona-btn:hover {
+      transform: scale(1.05);
+    }
+
+    /* Loader animado */
+    .loader {
+      margin: 0 auto 25px auto;
+      width: 50px;
+      height: 50px;
+      border: 5px solid rgba(255,255,255,0.2);
+      border-top: 5px solid #1aff00;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(15px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
   </style>
 </head>
+
 <body>
-  <h1>Você está sendo redirecionado...</h1>
-  <p id="txt-central">Aguarde alguns segundos...</p>
-  <button id="redireciona-btn">Ir para o site</button>
+  <div class="container">
+    <div class="loader"></div>
+
+    <h1>Você está sendo redirecionado...</h1>
+    <p id="txt-central">Aguarde alguns segundos...</p>
+
+    <button id="redireciona-btn">Ir para o site</button>
+  </div>
 
   <script src="configAWS.js"></script> 
   <script>
