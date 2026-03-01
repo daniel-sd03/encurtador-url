@@ -20,7 +20,7 @@ Ao acessar o link encurtado, o usuário vê uma página intermediária com conta
 
 ## 🏗 Arquitetura
 
-![Arquitetura do Encurtador](Diagrama/encurtador-url-diagrama.drawio.svg)
+![Arquitetura do Encurtador](diagrama/encurtador-url-diagrama.drawio.svg)
 
 # 🔀 Fluxos da Aplicação
 
