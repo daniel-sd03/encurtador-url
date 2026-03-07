@@ -147,8 +147,6 @@ public class Handler implements RequestHandler<Map<String, Object>, Map<String, 
 	private Map<String, String> criarHeaders(){
 	    Map<String, String> headers = new HashMap<>();
 	    headers.put("Content-Type", "application/json");
-	    //CORS, permissão apenas para encurtador.html
-	    headers.put("Access-Control-Allow-Origin", S3_WEBSITE_ORIGIN);
 	    return headers;
 	}
 }
